@@ -4,6 +4,7 @@ import LaunchParams from "./components/UrRLSearchParams";
 import Tasks from "./components/Tasks";
 import Withdrawal from "./components/Withdrawal";
 import Meme from "./components/Meme";
+import { App, Page, Navbar, Block } from 'konsta/react';
 
 export default function Home() {
   const user = LaunchParams();
@@ -22,7 +23,7 @@ export default function Home() {
   };
 
   return (
-    <main className="w-full bg-gray-900 text-white h-[100vh]">
+    <Page className="w-full bg-gray-900 text-white h-[100vh]">
       <section className="mx-auto mb-6">
         <h1 className="text-2xl font-bold">{user.initData?.user?.username}</h1>
       </section>
@@ -43,6 +44,6 @@ export default function Home() {
         <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" onClick={handleTasks}>Tasks</button>
         <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" onClick={handleWithdrawal}>Withdrawal</button>
       </section>
-    </main>
+    </Page>
   );
 }
