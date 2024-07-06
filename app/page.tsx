@@ -22,11 +22,11 @@ export default function Home() {
   };
 
   return (
-    <main className="w-full bg-black text-white h-[100vh]">
-      <section className="p-6 mb-6">
+    <main className="w-full bg-gray-900 text-white h-[100vh]">
+      <section className="mx-auto mb-6">
         <h1 className="text-2xl font-bold">{user.initData?.user?.username}</h1>
       </section>
-      <section className="p-6 mb-6">
+      <section className=" mb-6">
         {/* Dynamic content based on activeView */}
         {activeView === 'meme' && (
           <Meme />
