@@ -25,6 +25,17 @@ export const fetchTasks = createAsyncThunk(
   }
 );
 
+export const deleteTask= createAsyncThunk(
+  'task/deleteTask',
+  async (taskId: string) => {
+    // Implement the logic to delete the task from the server
+    await fetch(`/api/task/${taskId}`, {
+      method: 'DELETE'
+    });
+    return taskId;
+  }
+);
+
 export const taskSlice = createSlice({
   name: 'task',
   initialState,
@@ -32,18 +43,19 @@ export const taskSlice = createSlice({
     addTask: (state, action: PayloadAction<MyTask>) => {
       state.push(action.payload);
     },
-    deleteTask: (state, action: PayloadAction<string>) => {
-      return state.filter((task) => task._id !== action.payload);
-    },
+    
   },
   extraReducers: (builder) => {
     builder.addCase(fetchTasks.fulfilled, (state, action) => {
       return action.payload;
     });
+    builder.addCase(deleteTask.fulfilled, (state, action) => {
+      return state.filter((task) => task._id !== action.payload);
+    });
   },
 });
 
-export const { addTask, deleteTask } = taskSlice.actions;
+export const { addTask } = taskSlice.actions;
 
 export const selectTasks = (state: RootState) => state.tasks;
 

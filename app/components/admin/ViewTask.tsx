@@ -43,7 +43,7 @@ const ViewTask: React.FC = () => {
   };
   const handleConfirmDelete = async () => {
     if (!taskToDelete) return;
-
+    console.log(taskToDelete)
     try {
       dispatch(deleteTask(taskToDelete._id));
       toast.success('Task deleted successfully');

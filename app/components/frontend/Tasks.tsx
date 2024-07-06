@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import CompletedTasks from './CompletedTasks';
 import NewTasks from './NewTasks';
+import {Page} from 'konsta/react';
 
 const Tasks = () => {
   const [activeTab, setActiveTab] = useState('newTasks');
@@ -10,7 +11,7 @@ const Tasks = () => {
   };
 
   return (
-    <div className="w-full bg-gray-900 rounded-lg overflow-hidden shadow-lg">
+    <Page className="w-full bg-gray-900 rounded-lg overflow-hidden shadow-lg">
       <div className="flex justify-between   px-4 py-3">
         <button
           className={`text-lg font-medium px-4 py-2 rounded-t-lg focus:outline-none transition-colors duration-300 ${
@@ -40,7 +41,7 @@ const Tasks = () => {
           <NewTasks />
         )}
       </div>
-    </div>
+    </Page>
   );
 };
 

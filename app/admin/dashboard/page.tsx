@@ -1,8 +1,8 @@
  'use client'
 
-import AddTask from '@/app/components/AddTask';
-import Statstics from '@/app/components/Statstics';
-import ViewTask from '@/app/components/ViewTask';
+import AddTask from '@/app/components/admin/AddTask';
+import Statstics from '@/app/components/admin/Statstics';
+import ViewTask from '@/app/components/admin/ViewTask';
  import React, { useState } from 'react';
 
 const Dashboard = () => {

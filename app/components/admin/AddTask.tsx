@@ -1,5 +1,6 @@
 import React, { FormEvent, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { Block } from 'konsta/react';
 
 const AddTask = () => {
   const dispatch = useDispatch();
@@ -64,7 +65,7 @@ const AddTask = () => {
   };
 
   return (
-    <div className="p-4">
+    <Block className="p-4">
       <h1 className="text-2xl font-bold mb-4">Add Task</h1>
       <form className="space-y-4" onSubmit={handleSubmit}>
         <div>
@@ -164,7 +165,7 @@ const AddTask = () => {
           Add Task
         </button>
       </form>
-    </div>
+    </Block>
   );
 };
 
