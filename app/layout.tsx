@@ -1,7 +1,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import StoreProvider  from "./StoreProvider";  
-
+import LaunchParams from "./components/UrRLSearchParams";
 const inter = Inter({ subsets: ["latin"] });
 
  
@@ -11,7 +11,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
+   return (
     <html lang="en">
       <head>
       <meta
