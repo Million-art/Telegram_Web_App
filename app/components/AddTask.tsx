@@ -1,6 +1,9 @@
 import React, { FormEvent, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 const AddTask = () => {
+  const dispatch = useDispatch();
+
   const [formData, setFormData] = useState({
     company: '',
     price: 0,
@@ -39,6 +42,7 @@ const AddTask = () => {
         const error = await response.json();
         throw new Error(error.error || 'Failed to add task');
       }
+      dispatch({ type: 'addTask', payload: formData });
 
        setFormData({
         company: '',

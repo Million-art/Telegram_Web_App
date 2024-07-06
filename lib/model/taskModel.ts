@@ -11,6 +11,7 @@ const TaskSchema = new Schema({
     twitter: { type: String, },
     linkedin: { type: String, },
     price: { type: Number, required: true },
+    claimedBy: { type: Object },
 });
 
 let Task;

@@ -29,6 +29,7 @@ export async function POST(request: NextRequest) {
       instagram: instagram?.toString() || '',
       twitter: twitter?.toString() || '',
       linkedin: linkedin?.toString() || '',
+      claimedBy: null
     });
 
     // Save the task to the database

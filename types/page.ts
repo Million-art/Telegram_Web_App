@@ -1,8 +1,11 @@
 export interface User{
     _id:String,
-    name:String,
+    userId:Number,
+    fristName:String,
+    lastName:String,
     username:String,
     phone:Number,
+    referredBy:Object
 }
 
 export interface MyTask{

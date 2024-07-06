@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Dispatch } from 'react';
 import { toast } from 'react-toastify';
+import { fetchTasks, deleteTask } from '@/redux/feature/taskReducer';
+import { useAppSelector, useAppDispatch } from '@/redux/hooks/hooks';
 
 interface MyTask {
   _id: string;
@@ -15,24 +17,16 @@ interface MyTask {
 }
 
 const ViewTask: React.FC = () => {
-  const [tasks, setTasks] = useState<MyTask[]>([]);
+  const tasks = useAppSelector((state) => state.tasks);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [taskToDelete, setTaskToDelete] = useState<MyTask | null>(null);
   const [taskToView, setTaskToView] = useState<MyTask | null>(null);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const response = await fetch('/api/task');
-        const data = await response.json();
-        console.log(data);
-        setTasks(data);
-      } catch (error) {
-        console.error('Error fetching tasks:', error);
-      }
-    };
-    fetchTasks();
-  }, []);
+    dispatch(fetchTasks());
+  }, [dispatch]);
+
 
   const viewTask = (task: MyTask) => {
     setTaskToView(task);
@@ -47,26 +41,13 @@ const ViewTask: React.FC = () => {
     setShowConfirmation(false);
     setTaskToDelete(null);
   };
-
   const handleConfirmDelete = async () => {
     if (!taskToDelete) return;
 
     try {
-      const response = await fetch(`/api/task/${taskToDelete._id}`, {
-        method: 'DELETE',
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log(data.message);
-        setTasks((prevTasks) => prevTasks.filter((t) => t._id !== taskToDelete._id));
-        toast.success('Task deleted successfully');
-      } else {
-        const data = await response.json();
-        console.error('Error deleting task:', data.message);
-        toast.error(data.message);
-      }
-    } catch (error) {
+      dispatch(deleteTask(taskToDelete._id));
+      toast.success('Task deleted successfully');
+    } catch (error: any) {
       console.error('Error deleting task:', error);
       toast.error('Failed to delete task');
     } finally {
