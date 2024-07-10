@@ -3,16 +3,17 @@ import { MyTask } from '@/types/page';
 
 const TaskSchema = new Schema({
     company: { type: String, required: true },
-    telegramChannel: { type: String, },
-    telegramGroup: { type: String, },
-    facebook: { type: String, },
-    web: { type: String, },
-    instagram: { type: String, },
-    twitter: { type: String, },
-    linkedin: { type: String, },
+    telegramChannel: { type: String },
+    telegramGroup: { type: String },
+    facebook: { type: String },
+    web: { type: String },
+    instagram: { type: String },
+    twitter: { type: String },
+    linkedin: { type: String },
     price: { type: Number, required: true },
-    claimedBy: { type: Object },
-});
+    status: { type: String, enum: ['completed', 'pending'], default: 'pending' },
+    claimedBy: [{ type: Schema.Types.ObjectId, ref: 'User' }]
+  });
 
 let Task;
 try {

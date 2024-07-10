@@ -1,28 +1,68 @@
-
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '../store/store';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import LaunchParams from "@/app/components/UrRLSearchParams";
 import { User } from '@/types/page';
 
-// Define the initial state using the User type
-const initialState: User[] = [];
+const initialState: User = {
+  userName: '',
+  telegramId: 0,
+  firstName: '',
+  lastName: '',
+  referredBy: '',
+  balance: 0
+};
 
-export const userSlice = createSlice({
+export const createUser = createAsyncThunk(
+  'user/createUser',
+  async (_, { rejectWithValue, dispatch }) => {
+    try {
+      const launchParam = LaunchParams();
+      const telegramId = launchParam.initData?.user?.id;
+      const userName = launchParam.initData?.user?.username;
+      const firstName = launchParam.initData?.user?.firstName;
+      const lastName = launchParam.initData?.user?.lastName;
+      const profilePhoto = launchParam.initData?.user?.photoUrl;
+
+      const user = {
+        userName: userName || '',
+        telegramId: telegramId || 0,
+        firstName: firstName || '',
+        lastName: lastName || '',
+        profilePhoto: profilePhoto || '',
+        referredBy: null,
+        balance: 0,
+      };
+
+      const response = await fetch('/api/user', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(user),
+      });
+
+      if (response.ok) {
+        const newUser = await response.json();
+        dispatch(addUser(newUser));
+        return newUser;
+      } else {
+        return rejectWithValue('Failed to create user');
+      }
+    } catch (error) {
+      return rejectWithValue('Error creating user');
+    }
+  }
+);
+
+const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    addUser: (state, action: PayloadAction<User>) => {
-      // Modify the state to add a new user
-      state.push(action.payload);
-    },
-    deleteUser: (state, action: PayloadAction<string>) => {
-      // Modify the state to delete a user by its _id
-      return state.filter((user) => user._id !== action.payload);
+    addUser: (state, action: { payload: User }) => {
+      return action.payload;
     },
   },
+
 });
 
-export const { addUser, deleteUser } = userSlice.actions;
-
-export const selectUsers = (state: RootState) => state.users;
-
+export const { addUser } = userSlice.actions;
 export default userSlice.reducer;

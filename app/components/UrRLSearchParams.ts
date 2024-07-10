@@ -3,7 +3,7 @@ import { parseLaunchParams } from '@tma.js/sdk';
 
 
 const LaunchParams=()=>{
-    return parseLaunchParams(
+    const launchParam= parseLaunchParams(
         new URLSearchParams([
           ['tgWebAppVersion', '6.7'],
           ['tgWebAppPlatform', 'tdekstop'],
@@ -33,6 +33,8 @@ const LaunchParams=()=>{
           })],
         ]),
       );
+
+      return launchParam;
 }
 
 export default LaunchParams;

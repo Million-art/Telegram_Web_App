@@ -1,9 +1,9 @@
 import { fetchTasks } from '@/redux/feature/taskReducer';
 import { useAppSelector, useAppDispatch } from '@/redux/hooks/hooks';
-import { BackButton } from '@tma.js/sdk';
-import { Button } from 'konsta/react';
+import { setLoading, } from '@/redux/feature/loadingReducer';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import Loader from '@/app/Loader';
 
 interface MyTask {
   _id: string;
@@ -22,9 +22,21 @@ const NewTasks: React.FC = () => {
   const dispatch = useAppDispatch();
   const tasks = useAppSelector((state) => state.tasks);
   const [selectedTask, setSelectedTask] = useState<MyTask | null>(null);
+  const isLoading = useAppSelector(store => store.loading)
 
   useEffect(() => {
-    dispatch(fetchTasks());
+    const fetchData = async () => {
+      try {
+        dispatch(setLoading(true));
+        await dispatch(fetchTasks());
+        dispatch(setLoading(false));
+      } catch (error) {
+        console.error('Error fetching tasks:', error);
+        dispatch(setLoading(false));
+      }
+    };
+
+    fetchData();
   }, [dispatch]);
 
   const handleTaskClick = (task: any) => {
@@ -40,28 +52,31 @@ const NewTasks: React.FC = () => {
       <div className="mb-3">
         <h1 className="text-1xl font-bold text-gray-800">New Tasks</h1>
       </div>
-      {tasks.length > 0 ? (
-        <div className="space-y-2">
-          {tasks.map((task) => (
-            <div
-              key={task._id}
-              className="px-6 py-4 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200"
-              onClick={() => handleTaskClick(task)}
-            >
-              <p className="text-lg font-medium text-gray-800">{task.company}</p>
-              <p className="text-md font-medium text-blue-500 hover:text-blue-500">
-                {task.price.toFixed(2)}cent
-              </p>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className="flex justify-center items-center h-40">
-          <h1 className="text-2xl font-bold text-gray-500">
-            No new task at the moment, please come back later!
-          </h1>
-        </div>
-      )}
+      {isLoading ?
+        <div className='flex justify-center items-center'><Loader /> </div> : tasks.length > 0 ? (
+          <div className="space-y-2">
+            {tasks.map((task) => (
+              <div
+                key={task._id}
+                className="px-6 py-4 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200"
+                onClick={() => handleTaskClick(task)}
+              >
+                <p className="text-lg font-medium text-gray-800">{task.company}</p>
+                <p className="text-md font-medium text-blue-500 hover:text-blue-500">
+                  {task.price.toFixed(2)}cent
+                </p>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="flex justify-center items-center h-40">
+            {isLoading && <Loader />}
+
+            <h1 className="text-2xl font-bold text-gray-500">
+              No new task at the moment, please come back later!
+            </h1>
+          </div>
+        )}
 
       {selectedTask && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
@@ -83,12 +98,12 @@ const NewTasks: React.FC = () => {
               </p>
               {selectedTask.telegramChannel && (
                 <p className="text-md font-medium text-blue-500 hover:text-blue-500 mb-2">
-                   <Link href={selectedTask.telegramChannel}>Join Telegram Channel</Link> 
+                  <Link href={selectedTask.telegramChannel}>Join Telegram Channel</Link>
                 </p>
               )}
               {selectedTask.telegramGroup && (
                 <p className="text-md font-medium text-blue-500 hover:text-blue-500 mb-2">
-                   <Link href={selectedTask.telegramGroup}>Join Telegram Group</Link>
+                  <Link href={selectedTask.telegramGroup}>Join Telegram Group</Link>
                 </p>
               )}
               {selectedTask.facebook && (
@@ -103,17 +118,17 @@ const NewTasks: React.FC = () => {
               )}
               {selectedTask.instagram && (
                 <p className="text-md font-medium text-blue-500 hover:text-blue-500 mb-2">
-                   <Link href={selectedTask.instagram}>Follow on Instagram</Link>
+                  <Link href={selectedTask.instagram}>Follow on Instagram</Link>
                 </p>
               )}
               {selectedTask.twitter && (
                 <p className="text-md font-medium text-blue-500 hover:text-blue-500 mb-2">
-                   <Link href={selectedTask.twitter}>Follow on Twitter</Link>
+                  <Link href={selectedTask.twitter}>Follow on Twitter</Link>
                 </p>
               )}
               {selectedTask.linkedin && (
                 <p className="text-md font-medium text-blue-500 hover:text-blue-500 mb-2">
-                   <Link href={selectedTask.linkedin}>Follow on LinkedIn </Link>
+                  <Link href={selectedTask.linkedin}>Follow on LinkedIn </Link>
                 </p>
               )}
             </div>

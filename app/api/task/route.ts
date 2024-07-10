@@ -1,6 +1,7 @@
 import { NextResponse, NextRequest } from 'next/server';
 import { connectToDatabase } from '@/lib/mongoose';
 import Task from '@/lib/model/taskModel';
+import { TaskStatus } from '@/types/page';
 
 export async function POST(request: NextRequest) {
   try {
@@ -29,7 +30,8 @@ export async function POST(request: NextRequest) {
       instagram: instagram?.toString() || '',
       twitter: twitter?.toString() || '',
       linkedin: linkedin?.toString() || '',
-      claimedBy: null
+      status: TaskStatus.pending,  
+      claimedBy: [null]
     });
 
     // Save the task to the database

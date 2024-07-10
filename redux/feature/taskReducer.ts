@@ -1,19 +1,27 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from '../store/store';
+import { TaskStatus } from '@/types/page';
+import { User } from '@tma.js/sdk';
+
 interface MyTask {
   _id: string;
-  company: String;
-  telegramChannel: String;
-  telegramGroup: String;
-  facebook: String;
-  web: String;
-  instagram: String;
-  twitter: String;
-  linkedin: String;
-  price: Number;
+  company: string;
+  telegramChannel: string | null;
+  telegramGroup: string | null;
+  facebook: string | null;
+  web: string | null;
+  instagram: string | null;
+  twitter: string | null;
+  linkedin: string | null;
+  price: number;
+  status: TaskStatus;
+  claimedBy: User[];
 }
+
 // Define the initial state using the MyTask type
-const initialState: MyTask[] = [];
+const initialState: { tasks: MyTask[] } = {
+  tasks: [],
+};
 
 export const fetchTasks = createAsyncThunk(
   'task/fetchTasks',
@@ -25,12 +33,12 @@ export const fetchTasks = createAsyncThunk(
   }
 );
 
-export const deleteTask= createAsyncThunk(
+export const deleteTask = createAsyncThunk(
   'task/deleteTask',
   async (taskId: string) => {
     // Implement the logic to delete the task from the server
     await fetch(`/api/task/${taskId}`, {
-      method: 'DELETE'
+      method: 'DELETE',
     });
     return taskId;
   }
@@ -41,22 +49,21 @@ export const taskSlice = createSlice({
   initialState,
   reducers: {
     addTask: (state, action: PayloadAction<MyTask>) => {
-      state.push(action.payload);
+      state.tasks.push(action.payload);
     },
-    
   },
   extraReducers: (builder) => {
     builder.addCase(fetchTasks.fulfilled, (state, action) => {
-      return action.payload;
+      state.tasks = action.payload;
     });
     builder.addCase(deleteTask.fulfilled, (state, action) => {
-      return state.filter((task) => task._id !== action.payload);
+      state.tasks = state.tasks.filter((task) => task._id !== action.payload);
     });
   },
 });
 
 export const { addTask } = taskSlice.actions;
 
-export const selectTasks = (state: RootState) => state.tasks;
+export const selectTasks = (state: RootState) => state.tasks.tasks;
 
 export default taskSlice.reducer;

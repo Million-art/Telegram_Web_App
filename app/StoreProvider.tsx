@@ -1,7 +1,6 @@
 'use client'
 import React from 'react'
-import { Inter } from "next/font/google";
-import "./globals.css";
+ import "./globals.css";
 import { store } from '@/redux/store/store'
 import { Provider } from 'react-redux'
 import { App } from 'konsta/react';

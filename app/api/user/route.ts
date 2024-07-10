@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/mongoose";
-import { User } from "@/lib/model/userModel";
+import User from "@/lib/model/userModel";
 
 export async function POST(request: NextRequest) {
     try {
@@ -8,16 +8,19 @@ export async function POST(request: NextRequest) {
         await connectToDatabase();
 
         // Get the form data
-        const { name, username, phone } = await request.json();
+        const { userName, telegramId, firstName, lastName, referredBy, balance } = await request.json();
 
-        // Create a new product document
+        // Create a new user document
         const user = await User.create({
-            name: name.toString(),
-            username: username.toString(),
-            phone: phone.toString(), // Changed to string
+            userName,
+            telegramId,
+            firstName,
+            lastName,
+            referredBy,
+            balance,
         });
 
-        // Save the product to the database
+        // Save the user to the database
         await user.save();
 
         // Return a success response

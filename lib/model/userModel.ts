@@ -1,36 +1,36 @@
-// models/Product.js
+// models/User.ts
 import { User as UserInterface } from '@/types/page';
 import { Schema, model, Model } from 'mongoose';
 
 const userSchema = new Schema({
-    _id: {
+    
+    userName: {
         type: String,
-        required: true
+        required: true,
     },
-    userId: {
+    telegramId: {
         type: Number,
-        required: true
     },
-    fristName: {
+    firstName: {
         type: String,
-        required: true
     },
-    lasttName: {
+    lastName: {
         type: String,
-     },
-    username:{
-        type: String,
-        required: true
     },
-    phone: {
-        type: String,
-     },
     referredBy: {
         type: String,
-     }
+    },
+    balance: {
+        type: Number,
+    }
 });
 
- 
-const User: Model<UserInterface> = model<UserInterface>('User', userSchema);
- 
-export { User };
+let User;
+try {
+    User = model<UserInterface>('users');
+} catch (error) {
+    User = model<UserInterface>('users', userSchema);
+}
+
+export default User as typeof User & (new () => UserInterface);
+

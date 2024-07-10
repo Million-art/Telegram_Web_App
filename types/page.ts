@@ -1,23 +1,28 @@
-export interface User{
-    _id:String,
-    userId:Number,
-    fristName:String,
-    lastName:String,
-    username:String,
-    phone:Number,
-    referredBy:Object
-}
-
-export interface MyTask{
-    _id:String,
-    company:String,
-    telegramChannel:String,
-    telegramGroup:String,
-    facebook:String,
-    web:String,
-    instagram:String,
-    twitter:String,
-    linkedin:String,
-    price:Number,
-
-}
+export interface User {
+    userName: string;
+    telegramId: number;
+    firstName: string;
+    lastName: string;
+    referredBy: string | null;
+    balance: number;
+  }
+  
+  export interface MyTask {
+    id: string;
+    company: string;
+    telegramChannel: string | null;
+    telegramGroup: string | null;
+    facebook: string | null;
+    web: string | null;
+    instagram: string | null;
+    twitter: string | null;
+    linkedin: string | null;
+    price: number;
+    status: TaskStatus;
+    claimedBy: User[];
+  }
+  
+  export enum TaskStatus {
+    completed = 'completed',
+    pending = 'pending',
+  }

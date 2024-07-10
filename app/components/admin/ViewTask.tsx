@@ -1,38 +1,40 @@
 import React, { useState, useEffect, Dispatch } from 'react';
-import { toast } from 'react-toastify';
+import toast from "react-hot-toast";
 import { fetchTasks, deleteTask } from '@/redux/feature/taskReducer';
 import { useAppSelector, useAppDispatch } from '@/redux/hooks/hooks';
+import Loader from '@/app/Loader';
 
 interface MyTask {
   _id: string;
-  company: String;
-  telegramChannel: String;
-  telegramGroup: String;
-  facebook: String;
-  web: String;
-  instagram: String;
-  twitter: String;
-  linkedin: String;
-  price: Number;
+  company: string;
+  telegramChannel: string;
+  telegramGroup: string;
+  facebook: string;
+  web: string;
+  instagram: string;
+  twitter: string;
+  linkedin: string;
+  price: number;
 }
 
 const ViewTask: React.FC = () => {
-  const tasks = useAppSelector((state) => state.tasks);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [taskToDelete, setTaskToDelete] = useState<MyTask | null>(null);
   const [taskToView, setTaskToView] = useState<MyTask | null>(null);
-  const dispatch = useAppDispatch();
+
+  const dispatch: Dispatch<any> = useAppDispatch();
+  const tasks = useAppSelector((state) => state.tasks.tasks);
+  const loading = useAppSelector((state) => state.loading);
 
   useEffect(() => {
     dispatch(fetchTasks());
   }, [dispatch]);
 
-
-  const viewTask = (task: MyTask) => {
+  const viewTask = (task: any) => {
     setTaskToView(task);
   };
 
-  const handleDelete = (task: MyTask) => {
+  const handleDelete = (task: any) => {
     setTaskToDelete(task);
     setShowConfirmation(true);
   };
@@ -41,11 +43,11 @@ const ViewTask: React.FC = () => {
     setShowConfirmation(false);
     setTaskToDelete(null);
   };
+
   const handleConfirmDelete = async () => {
     if (!taskToDelete) return;
-    console.log(taskToDelete)
     try {
-      dispatch(deleteTask(taskToDelete._id));
+        dispatch(deleteTask(taskToDelete._id));
       toast.success('Task deleted successfully');
     } catch (error: any) {
       console.error('Error deleting task:', error);
@@ -58,10 +60,10 @@ const ViewTask: React.FC = () => {
 
   return (
     <div>
+      {loading && <Loader />}
+
       <h1 className="text-2xl font-bold mb-4">View Tasks</h1>
-      {!tasks.length ? (
-        <h2 className="text-lg font-medium">No tasks yet</h2>
-      ) : (
+      {Array.isArray(tasks) && tasks.length > 0 ? (
         <table className="w-full table-auto">
           <thead>
             <tr className="bg-gray-200">
@@ -72,7 +74,7 @@ const ViewTask: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {tasks.map((task, index) => (
+            {tasks.map((task) => (
               <tr key={task._id} className="border-b">
                 <td className="px-4 py-2">{task.company}</td>
                 <td className="px-4 py-2">{task.price.toFixed(2)}</td>
@@ -96,6 +98,14 @@ const ViewTask: React.FC = () => {
             ))}
           </tbody>
         </table>
+      ) : typeof tasks === 'object' ? (
+        <div>
+           <Loader />
+        </div>
+      ) : (
+        <div>
+          <p>No tasks available.</p>
+        </div>
       )}
 
       {/* Confirmation Popup */}

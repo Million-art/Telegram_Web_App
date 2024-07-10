@@ -1,6 +1,7 @@
 import React, { FormEvent, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Block } from 'konsta/react';
+import toast from "react-hot-toast";
 
 const AddTask = () => {
   const dispatch = useDispatch();
@@ -17,20 +18,18 @@ const AddTask = () => {
     linkedin: '',
   });
 
-  const handleFormChange = (event: any) => {
+  const handleFormChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormData({
       ...formData,
       [name]: name === 'price' ? parseFloat(value) || 0 : value,
     });
   };
-  const handleSubmit = async (event:FormEvent) => {
+
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
 
-  
-
     try {
-      // Make API call
       const response = await fetch('/api/task', {
         method: 'POST',
         headers: {
@@ -43,9 +42,9 @@ const AddTask = () => {
         const error = await response.json();
         throw new Error(error.error || 'Failed to add task');
       }
-      dispatch({ type: 'addTask', payload: formData });
 
-       setFormData({
+      dispatch({ type: 'addTask', payload: formData });
+      setFormData({
         company: '',
         price: 0,
         telegramChannel: '',
@@ -56,11 +55,9 @@ const AddTask = () => {
         twitter: '',
         linkedin: '',
       });
-
-      alert('Task added successfully!');
-    } catch (error:any) {
-      console.error('Error adding task:', error);
-      alert(error.message || 'Failed to add task');
+      toast.success('Task added successfully!');
+    } catch (error) {
+      toast.error('Failed to add task');
     }
   };
 
