@@ -53,9 +53,9 @@ const NewTasks: React.FC = () => {
         <h1 className="text-1xl font-bold text-gray-800">New Tasks</h1>
       </div>
       {isLoading ?
-        <div className='flex justify-center items-center'><Loader /> </div> : tasks.length > 0 ? (
+        <div className='flex justify-center items-center'><Loader /> </div> : tasks.tasks.length > 0 ? (
           <div className="space-y-2">
-            {tasks.map((task) => (
+            {tasks.tasks.map((task) => (
               <div
                 key={task._id}
                 className="px-6 py-4 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200"
