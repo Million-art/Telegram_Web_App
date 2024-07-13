@@ -7,18 +7,17 @@ import { Page, Navbar, Block } from 'konsta/react';
 import UserProfile from "./components/frontend/UserProfile";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
 import { setLoading } from "@/redux/feature/loadingReducer";
-import { retrieveLaunchParams } from '@telegram-apps/sdk';
- import checkUserRegistration from "@/utils/helper/checkUserRegistration";
+import { retrieveLaunchParams, LaunchParams } from '@telegram-apps/sdk'; import checkUserRegistration from "@/utils/helper/checkUserRegistration";
 // import LaunchParams from "./components/UrRLSearchParams";
 import { User } from "@/types/page";
  
 export default function Home() {
-  const launchParams = retrieveLaunchParams();
+   const launchParams: LaunchParams = retrieveLaunchParams();
 
   const [activeView, setActiveView] = useState('meme');
   const { isLoading } = useAppSelector(state => state.loading);
    const telegramId = launchParams.initData?.user?.id;
-  const userName = 'launchParams.initData?.user?.username;'
+  const userName = launchParams.initData?.user?.username;
   const firstName = launchParams.initData?.user?.firstName;
   const lastName = launchParams.initData?.user?.lastName;
   const user: User = {
