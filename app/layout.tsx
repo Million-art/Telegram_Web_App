@@ -1,4 +1,3 @@
-import { Inter } from "next/font/google";
 import "./globals.css";
 import StoreProvider from "./StoreProvider";
 import { Suspense } from "react";
@@ -7,8 +6,7 @@ import { Toaster } from "react-hot-toast";
 import { boolean } from "@tma.js/sdk";
 
 
-const inter = Inter({ subsets: ["latin"] });
-
+ 
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -23,7 +21,7 @@ export default function RootLayout({
           content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover"
         />
       </head>
-      <body className={inter.className}>
+      <body >
         <StoreProvider>
         <Suspense fallback={<Loader />}> 
 

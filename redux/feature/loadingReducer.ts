@@ -4,17 +4,18 @@ interface LoadingState {
   isLoading: boolean;
 }
 
-const initialState: boolean  = false
-
+const initialState: LoadingState = {
+  isLoading: false,
+};
 
 export const loadingSlice = createSlice({
   name: 'loading',
   initialState,
   reducers: {
-    setLoading: (state, action:PayloadAction<boolean> ) => {
-      return action.payload
-    } 
-  }
+    setLoading: (state, action: PayloadAction<boolean>) => {
+      state.isLoading = action.payload;
+    },
+  },
 });
 
 export const { setLoading } = loadingSlice.actions;

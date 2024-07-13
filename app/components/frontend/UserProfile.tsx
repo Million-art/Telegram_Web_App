@@ -7,7 +7,7 @@ const UserProfile = (user:any) => {
 
   return (
     <div>
-            <h1 className="text-2xl font-bold">user:{user?.userName} </h1>
+            <h1 className="text-2xl font-bold">user  </h1>
     </div>
   )
 }

@@ -1,32 +1,35 @@
 'use client'
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Tasks from "./components/frontend/Tasks";
 import Withdrawal from "./components/frontend/Withdrawal";
 import Meme from "./components/frontend/Meme";
 import { Page, Navbar, Block } from 'konsta/react';
 import UserProfile from "./components/frontend/UserProfile";
-import checkUserRegistration from "@/utils/helper/checkUserRegistration";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
-
+import { setLoading } from "@/redux/feature/loadingReducer";
+import { retrieveLaunchParams } from '@telegram-apps/sdk';
+ import checkUserRegistration from "@/utils/helper/checkUserRegistration";
+// import LaunchParams from "./components/UrRLSearchParams";
+import { User } from "@/types/page";
+ 
 export default function Home() {
+  const launchParams = retrieveLaunchParams();
+
   const [activeView, setActiveView] = useState('meme');
-  const [loading, setLoading] = useState(true);
-
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        await checkUserRegistration(dispatch);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-        setLoading(false);
-
-      }
-    };
-    fetchUserData();
-  }, [dispatch]);
-  const userData = useAppSelector((state) => state.users);
+  const { isLoading } = useAppSelector(state => state.loading);
+   const telegramId = launchParams.initData?.user?.id;
+  const userName = launchParams.initData?.user?.username;
+  const firstName = launchParams.initData?.user?.firstName;
+  const lastName = launchParams.initData?.user?.lastName;
+  const user: User = {
+    userName: userName || '',
+    telegramId: telegramId || 0,
+    firstName: firstName || '',
+    lastName: lastName || '',
+    referredBy: null,
+    balance: 0,
+  };
+ 
 
   const handleViewChange = (view: 'meme' | 'tasks' | 'withdrawal') => {
     setActiveView(view);
@@ -35,7 +38,10 @@ export default function Home() {
   return (
     <Page className="w-full bg-gray-900 text-white h-screen">
       <Navbar className="px-5 mb-6">
-        {loading ? <div>Loading...</div> : <UserProfile user={userData} />}
+        <div>
+        {isLoading ? <p>loading.....</p> : telegramId && <UserProfile user={userName} />}
+
+        </div>
       </Navbar>
       <Block className="mb-6">
         {activeView === 'meme' && <Meme />}
