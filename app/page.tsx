@@ -18,7 +18,7 @@ export default function Home() {
   const [activeView, setActiveView] = useState('meme');
   const { isLoading } = useAppSelector(state => state.loading);
    const telegramId = launchParams.initData?.user?.id;
-  const userName = launchParams.initData?.user?.username;
+  const userName = 'launchParams.initData?.user?.username;'
   const firstName = launchParams.initData?.user?.firstName;
   const lastName = launchParams.initData?.user?.lastName;
   const user: User = {
